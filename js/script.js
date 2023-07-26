@@ -1,23 +1,27 @@
 const content = document.querySelector(".content"),
-  Playimage = content.querySelector(".music-image img"),
-  musicName = content.querySelector(".music-titles .name"),
-  musicArtist = content.querySelector(".music-titles .artist"),
-  playBtn = content.querySelector(".play-pause"),
-  playBtnIcon = content.querySelector(".play-pause span"),
-  prevBtn = content.querySelector("#prev"),
-  nextBtn = content.querySelector("#next"),
-  repeatBtn = content.querySelector(".repeat-btn"),
-  repeatBtnIcon = content.querySelector(".repeat-btn span"),
-  Shuffle = content.querySelector(".shuffleBtn"),
-  ShuffleBtnIcon = content.querySelector(".shuffleBtn span"),
-  muteBtn = content.querySelector(".mute-volume"),
-  muteBtnIcon = content.querySelector(".mute-volume span"),
-  volumeUpBtn = content.querySelector(".volume-up"),
-  volumeSlider = content.querySelector("#volume-slider");
+Playimage = content.querySelector(".music-image img"),
+musicName = content.querySelector(".music-titles .name"),
+musicArtist = content.querySelector(".music-titles .artist"),
+playBtn = content.querySelector(".play-pause"),
+playBtnIcon = content.querySelector(".play-pause span"),
+prevBtn = content.querySelector("#prev"),
+nextBtn = content.querySelector("#next"),
+repeatBtn = content.querySelector(".repeat-btn"),
+repeatBtnIcon = content.querySelector(".repeat-btn span"),
+Shuffle = content.querySelector(".shuffleBtn"),
+ShuffleBtnIcon = content.querySelector(".shuffleBtn span"),
+muteBtn = content.querySelector(".mute-volume"),
+muteBtnIcon = content.querySelector(".mute-volume span"),
+volumeUpBtn = content.querySelector(".volume-up"),
+volumeSlider = content.querySelector("#volume-slider");
+currentTime = content.querySelector(".current-time");
+remainingTime = content.querySelector(".remaining-time");
+var index = 0;
+var defaultPlayimage = "./assets/images/default-icon.png";
 
-var wavesurfer = WaveSurfer.create({
+const options = {
   container: "#waveform",
-  waveColor: "#b5b7b8",
+  waveColor: "#b5b7b8",//"#b5b7b8"
   progressColor: "#00000",
   height: 50,
   barWidth: 2,
@@ -25,106 +29,67 @@ var wavesurfer = WaveSurfer.create({
   responsive: true,
   hideScrollbar: true,
   cursorWidth: 0,
-  interact: true,
-  barRadius: 0,
-  normalize: true,
-  autoplay: true,
-  // backend: 'MediaElement',
-  backend: 'MediaElementWebAudio',
-  // mediaType: "audio",
-  // media: audio,   
-});
-
-var index = 0;
-var curentVolume = 1;
-var repeatIsActive = 0;
-var shuffleIsActive = false;
-var defaultPlayimage = "./assets/images/default-icon.png";
-var rootAudioPath = "audio/";
-var firstPlay = true;
-
-shuffledArray = playList.slice();
-audiopPath =
-  rootAudioPath + shuffledArray[index].name + shuffledArray[index].type;
-
-wavesurfer.load(audiopPath);
-function playAudio() {
-  loadMetaData();
-  wavesurfer.on("ready", () => {
-    if(firstPlay){
-      playBtnIcon.innerHTML = "play_arrow";
-    }else{
-      playBtnIcon.innerHTML = "pause";
-      wavesurfer.play();
-    }
-    playBtn.onclick = function () {
-      if (!wavesurfer.isPlaying()) {
-        playBtnIcon.innerHTML = "pause";
-        wavesurfer.play();
-      } else {
-        playBtnIcon.innerHTML = "play_arrow";
-        wavesurfer.pause();
-      }
-      firstPlay = false;
-    };
-  });
+  interact: 1,
+  barRadius: 2,
+  // autoplay: true,
+  // backend:"MediaElementWebAudio",
+  minPxPerSec:1,
+  mediaControls:false,
+  sampleRate: 8000,
+  autoCenter: true,
+  audioRate: 1,
+  normalize: 0,
 }
-playAudio();
 
-wavesurfer.panner = wavesurfer.backend.ac.createStereoPanner();
-wavesurfer.backend.setFilter(wavesurfer.panner)
+var wavesurfer = WaveSurfer.create(options)
+var shuffledArray = playList.slice();
+
+wavesurfer.load(shuffledArray[index].path);
+
+wavesurfer.on("ready", () => {
+  readMediatags();
+  wavesurfer.play();
+})
 
 wavesurfer.on('pause', function () {
   playBtnIcon.innerHTML = "play_arrow";
-  // console.log(wavesurfer.backend.source.mediaElement.src);
 });
 
 wavesurfer.on('play', function () {
   playBtnIcon.innerHTML = "pause";
 });
 
-
-function formatTime(seconds) {
-  var minutes = Math.floor(seconds / 60),
-    seconds = Math.floor(seconds % 60);
-  return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
-}
-
-let currentTime = content.querySelector(".current-time");
-let remainingTime = content.querySelector(".remaining-time");
-wavesurfer.on("audioprocess", function () {
-  if (wavesurfer.isPlaying()) {
-    var totalTimeData = Math.floor(wavesurfer.getDuration()),
-      currentTimeData = Math.floor(wavesurfer.getCurrentTime()),
-      remainingTimeData = totalTimeData - currentTimeData;
-    currentTime.innerText = formatTime(currentTimeData.toFixed(1));
-    remainingTime.innerText = formatTime(remainingTimeData.toFixed(1));
+playBtn.onclick = function () {
+  if (!wavesurfer.isPlaying()) {
+    wavesurfer.playPause();
+  }else{
+    wavesurfer.playPause();
   }
-});
+};
 
-wavesurfer.on("finish", function () {
-  if (!wavesurfer.isPlaying() && repeatIsActive == 2) {
-    playBtnIcon.innerHTML = "pause";
+nextBtn.onclick = function () {
+  index++;
+  if (index >= playList.length) {
+    index = 0;
+  }
+  wavesurfer.load(shuffledArray[index].path);
+  wavesurfer.on("ready", function () {
     wavesurfer.play();
-  } else if (!wavesurfer.isPlaying()) {
-    if (repeatIsActive == 0 && index == playList.length-1) {
-      currentTime.innerText = formatTime(0);
-      remainingTime.innerText = formatTime(wavesurfer.getDuration());
-      playBtnIcon.innerHTML = "play_arrow";
-    } else {
-      index++;
-      if (index >= playList.length) {
-        index = 0;
-      }
-      audiopPath =
-        rootAudioPath + shuffledArray[index].name + shuffledArray[index].type;
-      wavesurfer.empty();
-      wavesurfer.load(audiopPath);
-      playAudio();
-    }
-  }
-});
+  })
+};
 
+prevBtn.onclick = function () {
+  index--;
+  if (index < 0) {
+    index = playList.length - 1;
+  }
+  wavesurfer.load(shuffledArray[index].path);
+  wavesurfer.on("ready", function () {
+    wavesurfer.play();
+  })
+};
+
+// var curentVolume = 1;
 function setVolume() {
   if (volumeSlider.value != 0) {
     muteBtnIcon.innerHTML = "volume_down";
@@ -134,8 +99,6 @@ function setVolume() {
   wavesurfer.setVolume(volumeSlider.value / 100);
   curentVolume = volumeSlider.value / 100;
 }
-
-Playimage.onclick = function () {};
 
 muteBtn.onclick = function () {
   if (wavesurfer.getVolume() > 0) {
@@ -161,47 +124,9 @@ volumeUpBtn.onclick = function () {
   muteBtnIcon.innerHTML = "volume_down";
 };
 
-repeatBtn.onclick = function () {
-  repeatIsActive++;
-  if (repeatIsActive == 1) {
-    repeatBtnIcon.innerHTML = "repeat";
-    repeatBtnIcon.style.color = "#4676f9";
-  } else if (repeatIsActive == 2) {
-    repeatBtnIcon.innerHTML = "repeat_one";
-  } else {
-    repeatBtnIcon.innerHTML = "repeat";
-    repeatBtnIcon.style.color = "#4d4d4d";
-    repeatIsActive = 0;
-  }
-};
-
-nextBtn.onclick = function () {
-  index++;
-  if (index >= playList.length) {
-    index = 0;
-  }
-  audiopPath =
-    rootAudioPath + shuffledArray[index].name + shuffledArray[index].type;
-  wavesurfer.empty();
-  wavesurfer.load(audiopPath);
-  playAudio();
-};
-
-prevBtn.onclick = function () {
-  index--;
-  if (index < 0) {
-    index = playList.length - 1;
-  }
-  audiopPath =
-    rootAudioPath + shuffledArray[index].name + shuffledArray[index].type;
-  wavesurfer.empty();
-  wavesurfer.load(audiopPath);
-  playAudio();
-};
-
-
+var isShuffle = false;
 Shuffle.onclick = function () {
-  if (shuffleIsActive) {
+  if (isShuffle) {
     ShuffleBtnIcon.style.color = "#4d4d4d";
     currentAudio = shuffledArray[index].name;
     shuffledArray = playList.slice();
@@ -216,7 +141,7 @@ Shuffle.onclick = function () {
       return item.name === currentAudio;
     });
   }
-  shuffleIsActive = !shuffleIsActive;
+  isShuffle = !isShuffle;
 };
 
 function shuffleArray(array) {
@@ -227,7 +152,75 @@ function shuffleArray(array) {
   return array;
 }
 
-function loadMetaData() {
+function formatTime(seconds) {
+  var minutes = Math.floor(seconds / 60),
+    seconds = Math.floor(seconds % 60);
+  return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+}
+
+wavesurfer.on("audioprocess", function () {
+  currentTime.innerText = formatTime(Math.floor(wavesurfer.getCurrentTime()).toFixed(1));
+  remainingTime.innerText = formatTime(Math.floor(wavesurfer.getDuration())-Math.floor(wavesurfer.getCurrentTime()).toFixed(1));
+});
+
+wavesurfer.on("finish", function () {
+  switch (isRepeat)
+  {
+    case 1:
+      index++;
+      if (index >= playList.length) {
+        index = 0;
+      }
+      wavesurfer.load(shuffledArray[index].path);
+      break;
+    case 2:
+      wavesurfer.play();
+      break;
+    default:
+      if (index == playList.length-1) {
+        index = 0;
+        wavesurfer.load(shuffledArray[index].path);
+        wavesurfer.on("ready", () => {
+          wavesurfer.pause();
+          currentTime.innerText = formatTime(0);
+          remainingTime.innerText = formatTime(wavesurfer.getDuration());
+        })
+      }else{
+        index++;
+        if (index >= playList.length) {
+          index = 0;
+        }
+        wavesurfer.load(shuffledArray[index].path);
+      }
+      break;
+  }
+})
+
+var isRepeat = 0;
+repeatBtn.onclick = function () {
+  isRepeat++;
+  if(isRepeat>2)
+  {
+    isRepeat = 0;
+  }
+  switch (isRepeat){
+    case 1:
+      repeatBtnIcon.innerHTML = "repeat";
+      repeatBtnIcon.style.color = "#4676f9";
+      break;
+    case 2:
+      repeatBtnIcon.innerHTML = "repeat_one";
+      break;
+    default:
+      repeatBtnIcon.innerHTML = "repeat";
+      repeatBtnIcon.style.color = "#4d4d4d";
+  }
+  console.log(isRepeat)
+};
+
+
+
+function readMediatags() {
   const url = window.location.href;
   const separator = "/";
   const parts = url.split(separator);
@@ -239,8 +232,7 @@ function loadMetaData() {
     separator +
     parts[3] +
     separator;
-  nDir = remainingUrl + audiopPath;
-  jsmediatags.read(nDir, {
+  jsmediatags.read(remainingUrl + shuffledArray[index].path, {
     onSuccess: function (tag) {
       var tags = tag.tags;
       var image = tags.picture;
@@ -273,40 +265,45 @@ function loadMetaData() {
 }
 
 window.onload = function() {
-    document.addEventListener("contextmenu", function(e) {
-        e.preventDefault();
-    }, false);
-    document.addEventListener("keydown", function(e) {
-        //document.onkeydown = function(e) {
-        // "I" key
-        if (e.ctrlKey && e.shiftKey && e.keyCode == 73) {
-            disabledEvent(e);
-        }
-        // "J" key
-        if (e.ctrlKey && e.shiftKey && e.keyCode == 74) {
-            disabledEvent(e);
-        }
-        // "S" key + macOS
-        if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
-            disabledEvent(e);
-        }
-        // "U" key
-        if (e.ctrlKey && e.keyCode == 85) {
-            disabledEvent(e);
-        }
-        // "F12" key
-        if (event.keyCode == 123) {
-            disabledEvent(e);
-        }
-    }, false);
+  document.addEventListener("contextmenu", function(e) {
+      e.preventDefault();
+  }, false);
+  document.addEventListener("keydown", function(e) {
+      //document.onkeydown = function(e) {
+      // "I" key
+      if (e.ctrlKey && e.shiftKey && e.keyCode == 73) {
+          disabledEvent(e);
+      }
+      // "J" key
+      if (e.ctrlKey && e.shiftKey && e.keyCode == 74) {
+          disabledEvent(e);
+      }
+      // "S" key + macOS
+      if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+          disabledEvent(e);
+      }
+      // "U" key
+      if (e.ctrlKey && e.keyCode == 85) {
+          disabledEvent(e);
+      }
+      // "F12" key
+      if (event.keyCode == 123) {
+          disabledEvent(e);
+      }
+  }, false);
 
-    function disabledEvent(e) {
-        if (e.stopPropagation) {
-            e.stopPropagation();
-        } else if (window.event) {
-            window.event.cancelBubble = true;
-        }
-        e.preventDefault();
-        return false;
-    }
+  function disabledEvent(e) {
+      if (e.stopPropagation) {
+          e.stopPropagation();
+      } else if (window.event) {
+          window.event.cancelBubble = true;
+      }
+      e.preventDefault();
+      return false;
+  }
 };
+
+wavesurfer.on('error', function(e) {
+console.log(e);
+error.innerText = e.toString();
+})
