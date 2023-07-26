@@ -33,7 +33,7 @@ const options = {
   barRadius: 2,
   // autoplay: true,
   // backend:"MediaElementWebAudio",
-  minPxPerSec:1,
+  minPxPerSec:10000,
   mediaControls:false,
   sampleRate: 8000,
   autoCenter: true,
