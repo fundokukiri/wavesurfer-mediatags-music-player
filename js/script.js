@@ -32,6 +32,7 @@ var wavesurfer = WaveSurfer.create({
   // backend: 'MediaElement',
   backend: 'MediaElementWebAudio',
   // mediaType: "audio",
+  // media: audio,   
 });
 
 var index = 0;
