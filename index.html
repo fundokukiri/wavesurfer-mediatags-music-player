@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link rel="icon" href="assets//images/musical-note.png" type="image/png" />
+  <title>Music Player</title>
+</head>
+<body>
+  <div class="content">
+    <div class="image-wrapper">
+      <div class="music-image">
+        <img src="assets/images/default-icon.png">
+      </div>
+    </div>
+    <div class="music-titles">
+      <p class="name">Music Player</p>
+      <p class="artist">By Fundokukiri</p>
+    </div>
+    <div class="waveform">
+      <div id="waveform"></div>
+    </div>
+    <div class="time">
+      <span class="current-time">0:00</span>
+      <span class="remaining-time">0:00</span>
+    </div>
+
+    <div class="control-btn">
+      <div class="repeat-btn">
+        <span class="material-symbols-rounded" id="repeat">repeat</span>
+      </div>
+      <span class="material-symbols-rounded" id="prev">skip_previous</span>
+      <div class="play-pause">
+        <span class="material-symbols-rounded">play_arrow</span>
+      </div>
+      <span class="material-symbols-rounded" id="next">skip_next</span>
+      <div class="shuffleBtn">
+        <span class="material-symbols-rounded" id="shuffle">shuffle</span>
+      </div>
+    </div>
+    <div class="volume-control-btn">
+      <div class="mute-volume">
+        <span class="material-symbols-rounded" >volume_down</span>
+      </div>
+      <input type="range" min="0" max="100" value="100" oninput="setVolume()" id="volume-slider"/>
+      <div class="volume-up">
+        <span class="material-symbols-rounded" >volume_up</span>
+      </div>
+    </div>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.js"></script> -->
+  <!-- <script src="https://unpkg.com/wavesurfer.js"></script> -->
+  <script src="js/jsmediatags.js"></script>
+  <script src="js/wavesufer.js"></script>
+  <script src="js/playlist.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>
