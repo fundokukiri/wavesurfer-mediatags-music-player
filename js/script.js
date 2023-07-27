@@ -16,6 +16,7 @@ volumeUpBtn = content.querySelector(".volume-up"),
 volumeSlider = content.querySelector("#volume-slider");
 currentTime = content.querySelector(".current-time");
 remainingTime = content.querySelector(".remaining-time");
+audioProgress = content.querySelector("#audio-progress");
 var index = 0;
 var defaultPlayimage = "./assets/images/default-icon.png";
 
@@ -29,13 +30,14 @@ const options = {
   responsive: true,
   hideScrollbar: true,
   cursorWidth: 0,
-  interact: 1,
+  interact: 0,
   barRadius: 2,
   // autoplay: true,
   // backend:"MediaElementWebAudio",
   minPxPerSec:100,
   mediaControls:false,
-  sampleRate: 8000,
+  // sampleRate: 8000,
+  autoScroll: true,
   autoCenter: true,
   audioRate: 1,
   normalize: 0,
@@ -159,9 +161,15 @@ function formatTime(seconds) {
 }
 
 wavesurfer.on("audioprocess", function () {
+  audioProgress.value = Math.floor(wavesurfer.getCurrentTime());
+  audioProgress.max = Math.floor(wavesurfer.getDuration());
   currentTime.innerText = formatTime(Math.floor(wavesurfer.getCurrentTime()).toFixed(1));
   remainingTime.innerText = formatTime(Math.floor(wavesurfer.getDuration())-Math.floor(wavesurfer.getCurrentTime()).toFixed(1));
 });
+
+function setaudioProgress(){
+  wavesurfer.setTime(audioProgress.value);
+}
 
 wavesurfer.on("finish", function () {
   switch (isRepeat)
@@ -262,6 +270,34 @@ function readMediatags() {
       console.log(error);
     },
   });
+}
+
+
+var typeWaveform = 0;
+Playimage.onclick = function () {
+  typeWaveform++;
+  if(typeWaveform>1){
+    typeWaveform=0;
+  }
+  // if (typeWaveform==2){
+  //   options_tmp = {
+  //     minPxPerSec:5000,
+  //   }
+  // }else if(typeWaveform==1){
+    if(typeWaveform==0){
+    options_tmp = {
+      minPxPerSec:100,
+    }
+  }else{
+    options_tmp = {
+      minPxPerSec:1,
+    }
+  }
+  wavesurfer.setOptions(options_tmp);
+}
+
+function myFunction(){
+
 }
 
 window.onload = function() {

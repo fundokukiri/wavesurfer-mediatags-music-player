@@ -11,6 +11,7 @@
 </head>
 <body>
   <div class="content">
+    <div id="bg-artwork"></div>
     <div class="image-wrapper">
       <div class="music-image">
         <img src="assets/images/default-icon.png">
@@ -25,6 +26,8 @@
     </div>
     <div class="time">
       <span class="current-time">0:00</span>
+      <input id="audio-progress" type="range" min="0" max="0" value="0" onmousemove="myFunction()" oninput="setaudioProgress()" />
+      
       <span class="remaining-time">0:00</span>
     </div>
 
