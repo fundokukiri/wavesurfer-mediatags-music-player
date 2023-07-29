@@ -35,7 +35,7 @@ options = {
   interact: true,
   barRadius: 3,
   // autoplay: true,
-  // backend:"MediaElementWebAudio",
+  backend:"MediaElementWebAudio",
   minPxPerSec: 100,
   mediaControls: false,
   // sampleRate: 8000,
@@ -52,9 +52,9 @@ document.addEventListener("DOMContentLoaded", function () {
   var defaultTrackArt = "./assets/images/default-icon.png";
   var wavesurfer = WaveSurfer.create(options);
 
-  // navigator.mediaSession = navigator.mediaSession || {};
-  // navigator.mediaSession.setActionHandler = navigator.mediaSession.setActionHandler || function () {};
-  // window.MediaMetadata = window.MediaMetadata || function () {};
+  navigator.mediaSession = navigator.mediaSession || {};
+  navigator.mediaSession.setActionHandler = navigator.mediaSession.setActionHandler || function () {};
+  window.MediaMetadata = window.MediaMetadata || function () {};
 
   wavesurfer.load(shuffledArray[index].path);
 
