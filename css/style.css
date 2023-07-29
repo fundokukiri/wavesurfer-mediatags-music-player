@@ -298,6 +298,14 @@ body {
 .tbody-playlist{
   display: flex;
   align-items: center;
+  /* border-style: solid;
+  border-color: rgb(223, 223, 223);
+  border-radius: 15px; */
+}
+
+.tbody-playlist:hover{
+  background-color: #e5e5e5;
+  cursor: pointer;
 }
 .track {
   margin-left: 20px;

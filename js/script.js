@@ -326,7 +326,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (tags.title) {
             // trackName.innerHTML = tags.title;
-            trackName.innerHTML = tags.title.length>24 ? tags.title : tags.title+"<br></br>" ;
+            // console.log(tags.title.length)
+            trackName.innerHTML = tags.title.length>=28 ? tags.title : tags.title+"<br></br>" ;
         } else {
           trackName.innerHTML = "Unknow";
         }
