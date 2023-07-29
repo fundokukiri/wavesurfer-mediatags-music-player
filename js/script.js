@@ -32,10 +32,10 @@ options = {
   responsive: true,
   hideScrollbar: true,
   cursorWidth: 0,
-  interact: true,
+  interact: 0,
   barRadius: 3,
   // autoplay: true,
-  // backend:"MediaElementWebAudio",
+  backend:"MediaElementWebAudio",
   minPxPerSec: 100,
   mediaControls: false,
   // sampleRate: 8000,
@@ -68,6 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function PlayPause() {
     wavesurfer.on("ready", () => {
+      loadtrList();
       readMediatag();    
       currentTime.innerText = formatTime(0);
       remainingTime.innerText = formatTime(wavesurfer.getDuration());
@@ -188,6 +189,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
   }changeVolume();
 
+  function loadtrList(){
+    var cartItem = document.querySelectorAll(".tbody tr");
+    for (var i = 0; i < cartItem.length; i++) {
+      var productT = document.querySelectorAll(".tbody-playlist");
+      productT[i].addEventListener("click", function (event) {
+        var cartDelete = event.target;
+        var cartItemDelete = cartDelete.parentElement.parentElement.parentElement.parentElement;
+        var nametrack = cartItemDelete.querySelector("#track-name").innerText;
+        index = playList.findIndex(function (item, i) {
+          return item.name === nametrack;
+        });
+        // console.log(index)
+        wavesurfer.load(playList[index].path);
+        // PlayPause();
+      });
+    }
+  }
+
   function onFinish(){
     wavesurfer.on("finish", function () {
       switch(isRepeat%3){
@@ -226,7 +245,9 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector(".sidebar .sidebar-content").onclick = function(){
       document.querySelector(".sidebar").classList.remove("active");
     };
-    
+  }visiblePlaylist();
+  
+  function showPlaylist(){
     for (var i = 0; i < playList.length; i++) {
       const url = window.location.href;
       const separator = "/";
@@ -250,20 +271,20 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             var base64 =
               "data:" + image.format + ";base64," + window.btoa(base64String);
-          }
-          var addtr = document.createElement("tr");
-          var tr = '<tr><td><div class="tbody-playlist"><img src="'+base64+'" alt="" style="height: 40px;width: 40px;"><div class="track"><div id="track-name">'+tags.title+'</div><div id="track-artist">'+tags.artist+'</div></div></div></td></tr>'
-          addtr.innerHTML = tr;
-          var table = document.querySelector(".tbody");
-          table.append(addtr);
-        },
-        onError: function (error) {
-          console.log(error);
-        },
-      }); 
+              var addtr = document.createElement("tr");
+              var tr = '<tr><td><div class="tbody-playlist"><img src="'+base64+'" alt="" style="height: 40px;width: 40px;"><div class="track"><div id="track-name">'+tags.title.toLocaleString("de-DE")+'</div><div id="track-artist">'+tags.artist.toLocaleString("de-DE")+'</div></div></div></td></tr>'
+              addtr.innerHTML = tr;
+              var table = document.querySelector(".tbody");
+              table.append(addtr);
+            }
+          },
+          onError: function (error) {
+            console.log(error);
+          },
+        }); 
     }
-  }visiblePlaylist();
-
+  }showPlaylist();
+  
   function shufflePlayList(){
     isShuffle = false;
     ShuffleBtn.onclick = function () {
