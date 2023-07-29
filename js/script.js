@@ -35,7 +35,7 @@ options = {
   interact: true,
   barRadius: 3,
   // autoplay: true,
-  backend:"MediaElementWebAudio",
+  // backend:"MediaElementWebAudio",
   minPxPerSec: 100,
   mediaControls: false,
   // sampleRate: 8000,
