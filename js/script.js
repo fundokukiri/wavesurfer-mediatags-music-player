@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
       currentTime.innerText = formatTime(0);
       remainingTime.innerText = "-" + formatTime(wavesurfer.getDuration());
       wavesurfer.play();
-      wavesurfer.pause();
+      // wavesurfer.pause();
       playPauseBtn.onclick = function () {
         if (!wavesurfer.isPlaying()) {
           wavesurfer.playPause();
