@@ -28,7 +28,7 @@ body {
   right: -30px;
   bottom: -30px;
   left: -30px;
-  background-image: url("../assets/images/default-icon.png");
+  background-image: url("../assets/images/default-icon.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 50%;
@@ -89,18 +89,27 @@ body {
 }
 
 .track-name #name{
-  font-size: 20px;
+  font-size: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-weight: bold;
 }
 
 .track-name #artist{
-  font-size: 15px;
+  font-size: 14px;
   opacity: 0.9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .track-name #album{
-  font-size: 15px;
+  font-size: 14px;
   opacity: 0.9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .waveform{
@@ -118,7 +127,7 @@ body {
   margin-bottom: 20px;
   margin-right: 5px;/**/
   margin-left: 5px;
-  font-size: 13px;
+  font-size: 12px;
   color: #4d4d4d;
 }
 
@@ -130,20 +139,22 @@ body {
   background-color: rgb(255, 255, 255);
   border-radius: 15px;
   cursor: pointer;
-}
+} 
+
+#track-seek-bar:hover{
+  height: 8px;
+} 
 
 #track-seek-bar::-webkit-slider-thumb {
   appearance: none;
   width: 0px;
   height: 0px;
   background: rgb(207, 207, 207);
-  cursor: pointer;
   box-shadow: -200px 0 0 200px #4d4d4d;
 }
 
 #track-seek-bar::-webkit-slider-thumb:hover {
   box-shadow: -200px 0 0 200px #000000;
-  cursor: pointer;
 }
 
 .track_control-btn {
@@ -152,6 +163,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  cursor: pointer;
 }
 
 .track_control-btn span {
@@ -173,7 +185,6 @@ body {
 
 .track_control-btn span:hover {
   background-color: #ffffff;
-  cursor: pointer;
 }
 
 .volume-control-btn {
@@ -182,6 +193,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  cursor: pointer;  
 }
 
 .volume-control-btn span {
@@ -201,7 +213,6 @@ body {
 
 .volume-control-btn span:hover {
   background-color: #ffffff;
-  cursor: pointer;
 }
 
 #volume-control-slider{
@@ -213,6 +224,9 @@ body {
   border-radius: 15px;
   cursor: pointer;
 }
+
+/* #volume-control-slider:hover{
+} */
 
 #volume-control-slider::-webkit-slider-thumb {
   appearance: none;
@@ -253,7 +267,7 @@ body {
   color: #333;
   padding: 15px;
   z-index: 9999;
-  background: #fff;
+  background: #e3edf7;
   transform: translateX(-100%);
   float: left;
 }
@@ -275,7 +289,8 @@ body {
 
 .sidebar .sidebar-content .top-head .email {
   font-size: 13px;
-  margin-bottom: 20px
+  margin-bottom: 20px;
+  font-style: italic ;
 }
 .sidebar .sidebar-content .playlist{
   position: relative;
@@ -284,11 +299,11 @@ body {
   overflow-x: hidden;
 }
 .table-p {
-  background-color: rgb(255, 255, 255);
+  background-color: #e3edf7;
   width: 100%;
 }
 .mini-playlist-container {
-  background-color: #ffffff;
+  background-color: #e3edf7;
   border-radius: 5px;
   height: 650px;
   width: 100%;
@@ -304,7 +319,7 @@ body {
 }
 
 .tbody-playlist:hover{
-  background-color: #e5e5e5;
+  background-color: #ffffff;
   cursor: pointer;
 }
 .track {
