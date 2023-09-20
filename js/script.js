@@ -377,8 +377,11 @@ document.addEventListener("DOMContentLoaded", function () {
         });
       },
       onError: function (error) {
+        trackArt.src = "./assets/images/default-icon.jpg";
+        bgArtwork.style.backgroundImage =
+          "url('./assets/images/default-icon.jpg')";
         document.title =
-          shuffledArray[index].name.split("-")[1] +
+        shuffledArray[index].name.split("-")[1] +
           " | " +
           shuffledArray[index].name.split("-")[0];
         trackName.innerHTML = shuffledArray[index].name.split("-")[1];
